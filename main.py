@@ -9,10 +9,10 @@ headers = {'Connection': 'close', 'User-Agent': 'Mozilla/5.0',
            'Cookie': f'uid={conf["uid"]};_uuid={conf["_uuid"]};SESSDATA={conf["SESSDATA"]}'}
 
 
-def get(path: str):
+def get():
     url = f'https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?visitor_uid={conf["uid"]}&host_uid={conf["uid"]}&need_top=1&offset_dynamic_id='
     try:
-        resp = requests.get(url + path, headers=headers, timeout=5)
+        resp = requests.get(url, headers=headers, timeout=5)
         if resp.status_code == 200:
             return resp
         return False
@@ -31,13 +31,12 @@ def post(id):
         print(e)
 
 
-path_next = "/dynamic_svr/v1/dynamic_svr/space_history?visitor_uid=410576063&host_uid=410576063&need_top=1&offset_dynamic_id="
 result = []
 offset = 0
 page = 1
 while True:
     print(f'第{page}页，当前offset是\t{offset}')
-    resp = get(path_next + str(offset))
+    resp = get()
     if resp:
         try:
             cards = resp.json()['data']['cards']
